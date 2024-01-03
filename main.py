@@ -4,7 +4,7 @@ from src.resume_parser import ResumeParser
 
 
 if __name__ == '__main__':
-    filename = os.path.join('/Users/james/Documents/Personal Info', 'james cheng.docx')
+    filename = os.path.join('resumes', 'james cheng.docx')
     loader = LoadFactory()
     content = loader.load_file_content(LoadDocx(filename))
 
