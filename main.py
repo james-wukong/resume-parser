@@ -9,6 +9,6 @@ if __name__ == '__main__':
     content = loader.load_file_content(LoadDocx(filename))
 
     parser = ResumeParser(content)
-    applicant_name = parser.extract_address()
+    experience = parser.extract_experience()
 
-    print(applicant_name)
+    print(experience)
