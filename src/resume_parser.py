@@ -14,17 +14,17 @@ from src.constants import RESUME_SECTION_SET, SKILL_SET
 # nltk.download('stopwords')
 # nltk.download('wordnet')
 
-class ResumeParser():
-    '''
+
+class ResumeParser:
+    """
     parse resumes, including extract applicant's names, phone numbers, skills, etc
-    '''
+    """
 
     def __init__(self, content:str='') -> None:
         self.resume_content = content
         self.nlp = spacy.load('en_core_web_sm')
         self.doc = self.nlp(self.resume_content)
         self.matcher = Matcher(self.nlp.vocab)
-
 
     def extract_address(self) -> list:
         """Extracts address information from a resume text.
@@ -85,11 +85,11 @@ class ResumeParser():
         return address_info
 
     def extract_name(self) -> str | None:
-        '''
+        """
         extract applicants' names from the resume content
         Returns:
             str: applicant_name
-        '''
+        """
         if self.resume_content is None:
             return None
         
@@ -113,7 +113,7 @@ class ResumeParser():
         return None
     
     def extract_phones(self) -> list:
-        '''
+        """
         \ b: Matches word boundaries to ensure the number is a whole word.
         (?:\+?\d{1,3}[-.\s]?)?: Matches an optional international prefix (e.g., +1) with 1-3 digits, followed by optional separators.
         \(?\d{3}\)?: Matches an optional area code in parentheses with 3 digits.
@@ -122,7 +122,7 @@ class ResumeParser():
         extract phone numbers from the resume
         Returns:
             list: phone number list
-        '''
+        """
         # PHONE_REG = re.compile(r'[\+\(]?[1-9][0-9 .\-\(\)]{8,}[0-9]')
         # Use regex pattern to find a potential contact number
         pattern = re.compile(r"\b(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b")
@@ -131,26 +131,27 @@ class ResumeParser():
         return phones
 
     def extract_email(self) -> str:
-        '''
+        """
         Extract email from resume text
         Returns:
             str: email address
-        '''
+        """
         # Use regex pattern to find a potential email address
         pattern = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
         match = re.search(pattern, self.resume_content)
+        email = ''
         if match:
             email = match.group()
 
         return email
     
-    def extract_skills(self) -> list:
-        '''Extracts skills from a resume text.
+    def extract_skills(self) -> set:
+        """Extracts skills from a resume text.
         Args:
 
         Returns:
             list: A list of extracted skills
-        '''
+        """
 
         # stop_words = set(nltk.corpus.stopwords.words('english'))
         word_tokens = nltk.tokenize.word_tokenize(TextCleaner(self.resume_content).clean_text())
@@ -176,13 +177,13 @@ class ResumeParser():
     
         return found_skills
 
-    def extract_education(self) -> list | None:
-        '''Extracts education information from a resume text.
+    def extract_education(self) -> str | None:
+        """Extracts education information from a resume text.
         Args:
 
         Returns:
             str: education string
-        '''
+        """
         if self.resume_content is None:
             return None
         
